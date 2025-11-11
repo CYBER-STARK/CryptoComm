@@ -1,0 +1,203 @@
+/* ====== CryptoComm Chat Page ====== */
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: radial-gradient(circle at top right, #0a0a0a, #151515, #000);
+  color: #fff;
+  overflow: hidden;
+}
+
+.chat-container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.chat-sidebar {
+  width: 280px;
+  background: rgba(15, 15, 15, 0.95);
+  border-right: 1px solid rgba(0, 255, 255, 0.15);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-sidebar h2 {
+  background: linear-gradient(90deg, #00eaff, #6effa5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.friend-list {
+  list-style: none;
+  padding: 0;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.friend-item {
+  padding: 12px 10px;
+  border-radius: 10px;
+  background: rgba(0, 255, 255, 0.05);
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.friend-item:hover {
+  background: rgba(0, 255, 255, 0.1);
+}
+
+.friend-item.active {
+  background: rgba(0, 255, 255, 0.2);
+}
+
+.friend-name {
+  font-weight: 600;
+}
+
+.friend-address {
+  color: #aaa;
+  font-size: 0.8rem;
+  font-family: monospace;
+}
+
+.back-btn {
+  margin-top: 20px;
+  background: linear-gradient(90deg, #00eaff, #6effa5);
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 600;
+  color: #000;
+  cursor: pointer;
+}
+
+/* Chat Main */
+.chat-main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  background: rgba(20, 20, 20, 0.95);
+  padding: 15px 25px;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-header h3 {
+  margin: 0;
+  color: #6effa5;
+}
+
+.chat-address {
+  color: #aaa;
+  font-size: 0.8rem;
+  font-family: monospace;
+}
+
+.exit-btn {
+  background: transparent;
+  border: 1px solid #00eaff;
+  border-radius: 8px;
+  color: #00eaff;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.exit-btn:hover {
+  background: #00eaff;
+  color: #000;
+}
+
+/* Messages */
+.chat-messages {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  max-width: 60%;
+  margin-bottom: 15px;
+  padding: 10px 14px;
+  border-radius: 15px;
+  line-height: 1.4;
+  font-size: 0.95rem;
+  position: relative;
+  animation: fadeIn 0.3s ease;
+}
+
+.message.sent {
+  align-self: flex-end;
+  background: linear-gradient(90deg, #00eaff, #6effa5);
+  color: #000;
+  border-bottom-right-radius: 4px;
+}
+
+.message.received {
+  align-self: flex-start;
+  background: rgba(0, 255, 255, 0.1);
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  border-bottom-left-radius: 4px;
+}
+
+.message-time {
+  font-size: 0.75rem;
+  color: #ccc;
+  margin-top: 4px;
+  display: block;
+  text-align: right;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Input */
+.chat-input {
+  display: flex;
+  padding: 15px 25px;
+  border-top: 1px solid rgba(0, 255, 255, 0.15);
+  background: rgba(10, 10, 10, 0.9);
+}
+
+.chat-input input {
+  flex-grow: 1;
+  background: #101010;
+  border: 1px solid #00eaff;
+  border-radius: 12px;
+  padding: 12px;
+  color: #fff;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.chat-input button {
+  background: linear-gradient(90deg, #00eaff, #6effa5);
+  border: none;
+  border-radius: 10px;
+  padding: 12px 20px;
+  color: #000;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: transform 0.2s, box-shadow 0.3s ease;
+}
+
+.chat-input button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+}
