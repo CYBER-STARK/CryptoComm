@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import FriendsPage from "./pages/FriendsPage";
 import ChatPage from "./pages/ChatPage";
 import ProfilePage from "./pages/ProfilePage";
+import TopNavBar from "./pages/TopNavBar";
 import "./App.css";
 
 function App() {
@@ -15,8 +16,8 @@ function App() {
         <Route path="/" element={<ConnectPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/friends" element={<FriendsPage />} />
         <Route path="/chat" element={<ChatPage />} />
+        <Route path="/friends" element={<FriendsPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route
           path="*"

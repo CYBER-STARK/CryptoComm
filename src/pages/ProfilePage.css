@@ -1,5 +1,5 @@
 /* ====== CryptoComm Profile Page ====== */
-
+/*
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
@@ -15,7 +15,7 @@ body {
   align-items: center;
 }
 
-/* Header */
+
 .profile-header {
   position: fixed;
   top: 0;
@@ -53,7 +53,7 @@ body {
   color: #00eaff;
 }
 
-/* Main */
+
 .profile-main {
   padding-top: 120px;
   display: flex;
@@ -107,7 +107,7 @@ body {
   font-size: 0.95rem;
 }
 
-/* Info Boxes */
+
 .info-section {
   display: flex;
   justify-content: space-around;
@@ -140,7 +140,7 @@ body {
   margin: 0;
 }
 
-/* Button */
+
 .logout-btn {
   background: linear-gradient(90deg, #ff4f4f, #ff7373);
   border: none;
@@ -157,10 +157,11 @@ body {
   box-shadow: 0 0 15px rgba(255, 79, 79, 0.5);
 }
 
-/* Footer */
+
 .profile-footer {
   margin-top: 60px;
   padding: 20px;
   color: #777;
   font-size: 0.85rem;
 }
+*/

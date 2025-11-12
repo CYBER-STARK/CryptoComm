@@ -1,5 +1,5 @@
 /* ====== CryptoComm Dashboard Page ====== */
-
+/*
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
@@ -15,7 +15,7 @@ body {
   align-items: center;
 }
 
-/* Header */
+
 .dashboard-header {
   position: fixed;
   top: 0;
@@ -53,7 +53,7 @@ body {
   color: #00eaff;
 }
 
-/* Main */
+
 .dashboard-main {
   padding-top: 120px;
   width: 80%;
@@ -61,7 +61,7 @@ body {
   text-align: center;
 }
 
-/* Welcome Card */
+
 .welcome-card {
   background: rgba(20, 20, 20, 0.9);
   border: 1px solid rgba(0, 255, 255, 0.2);
@@ -88,7 +88,7 @@ body {
   margin-top: 15px;
 }
 
-/* Quick Actions */
+
 .quick-actions {
   display: flex;
   justify-content: center;
@@ -123,10 +123,10 @@ body {
   font-size: 0.9rem;
 }
 
-/* Footer */
 .dashboard-footer {
   margin-top: 60px;
   padding: 20px;
   color: #777;
   font-size: 0.85rem;
 }
+*/

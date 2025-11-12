@@ -1,5 +1,5 @@
 /* ====== CryptoComm Friends Page ====== */
-
+/*
 body {
   background: radial-gradient(circle at top right, #0a0a0a, #151515, #000);
   color: #fff;
@@ -17,7 +17,7 @@ body {
   padding-top: 80px;
 }
 
-/* --- Navbar --- */
+
 .friends-header {
   position: fixed;
   top: 0;
@@ -54,7 +54,7 @@ body {
   color: #00eaff;
 }
 
-/* --- Card --- */
+
 .friends-card {
   background: rgba(20, 20, 20, 0.9);
   border: 1px solid rgba(0, 255, 255, 0.2);
@@ -119,7 +119,7 @@ body {
   box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
 }
 
-/* --- Add Friend --- */
+
 .add-friend {
   display: flex;
   justify-content: center;
@@ -154,9 +154,10 @@ body {
   box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
 }
 
-/* --- Footer --- */
+
 .footer {
   margin-top: 40px;
   font-size: 0.85rem;
   color: #888;
 }
+*/

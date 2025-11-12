@@ -1,117 +1,170 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useMemo, useContext } from "react";
 import { ethers } from "ethers";
 import { Web3Context } from "../context/Web3Context.jsx";
 import userABI from "../utils/userABI.json";
-import "./ProfilePage.css";
+import "./pageTheme.css";
 
 const ProfilePage = () => {
-  const navigate = useNavigate();
-  const { account, signer, isConnected, connectWallet } = useContext(Web3Context);
+  const { account, isConnected, connectWallet } = useContext(Web3Context);
+
   const [username, setUsername] = useState("");
   const [friendCount, setFriendCount] = useState(0);
+  const [joinedDate, setJoinedDate] = useState("");
   const [loading, setLoading] = useState(false);
+  const [userAddress, setUserAddress] = useState("");
 
-  // 🪙 Replace with your deployed UserRegistration contract address
-  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  // Replace with your deployed UserRegistration address
+  const contractAddress = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
 
-  // 🔹 Fetch user info from blockchain
-  const fetchUserInfo = async () => {
+  // 🔹 Connect to the blockchain contract
+  const getContract = async () => {
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    return new ethers.Contract(contractAddress, userABI, signer);
+  };
+
+  // 🧩 Fetch user details
+  const fetchUserData = async () => {
     if (!isConnected || !account) return;
     try {
       setLoading(true);
-      const network = { chainId: 31337, name: "hardhat" };
-      const provider = new ethers.BrowserProvider(window.ethereum, network);
-      const signer = await provider.getSigner();
-      const contract = new ethers.Contract(contractAddress, userABI, signer);
+      const contract = await getContract();
 
-      const [name, userAddress, friends] = await contract.getUser(account);
+      const [name, userAddr, friends] = await contract.getUser(account);
 
       setUsername(name || "Unnamed");
-      setFriendCount(friends.length);
+      setFriendCount(friends.length || 0);
+      setUserAddress(userAddr);
+      setJoinedDate(new Date().toLocaleDateString());
     } catch (error) {
-      console.error("Error fetching profile info:", error);
-      alert("Unable to fetch user data. Please ensure you’re registered.");
+      console.error("Error fetching user:", error);
+      alert("⚠️ Unable to fetch user data. Are you registered?");
     } finally {
       setLoading(false);
     }
   };
 
-  // 🧩 Load data automatically
   useEffect(() => {
     if (isConnected) {
-      fetchUserInfo();
+      fetchUserData();
     }
   }, [isConnected, account]);
 
+  const initials = useMemo(() => {
+    if (!username) return "";
+    const words = username.split(" ");
+    return words.length > 1
+      ? (words[0][0] + words[1][0]).toUpperCase()
+      : words[0][0].toUpperCase();
+  }, [username]);
+
   return (
-    <div className="profile-container">
-      {/* Navbar */}
-      <header className="profile-header">
-        <h1>👤 Your Profile</h1>
-        <nav>
-          <button onClick={() => navigate("/dashboard")}>🏠 Dashboard</button>
-          <button onClick={() => navigate("/friends")}>👥 Friends</button>
-          <button onClick={() => navigate("/chat")}>💬 Chat</button>
-        </nav>
+    <section className="page-section">
+      <header className="page-header">
+        <h1>Your Profile</h1>
+        <p>Manage your identity and on-chain footprint on CryptoComm.</p>
       </header>
 
-      {/* Main Content */}
-      <main className="profile-main">
-        <div className="profile-card">
-          {loading ? (
-            <p>⏳ Loading profile from blockchain...</p>
-          ) : (
-            <>
-              <h2>
-                Welcome, <span className="highlight">{username}</span> 👋
-              </h2>
-              <p className="tagline">
-                Your Decentralized Identity on the Blockchain
-              </p>
-
-              <div className="wallet-section">
-                <h3>🪙 Wallet Address</h3>
-                <p className="wallet-address">
-                  {account
-                    ? `${account.slice(0, 8)}...${account.slice(-6)}`
-                    : "Not connected"}
+      {!isConnected ? (
+        <div style={{ textAlign: "center", marginTop: "50px" }}>
+          <button className="primary-btn" onClick={connectWallet}>
+            🔗 Connect MetaMask
+          </button>
+        </div>
+      ) : (
+        <div className="content-grid">
+          <div className="glass-card focus profile-card">
+            <div className="profile-header">
+              <div className="avatar-circle">{initials}</div>
+              <div>
+                <h2>{username}</h2>
+                <p>@{account?.slice(0, 6)}...{account?.slice(-4)}</p>
+                <p className="list-subtitle">
+                  {loading
+                    ? "Loading from blockchain..."
+                    : "Profile synced with smart contract"}
                 </p>
               </div>
+              <button type="button" className="secondary-btn" onClick={fetchUserData}>
+                🔄 Refresh
+              </button>
+            </div>
 
-              <div className="info-section">
-                <div className="info-box">
-                  <h4>Friends</h4>
-                  <p>{friendCount}</p>
-                </div>
-                <div className="info-box">
-                  <h4>Messages Sent</h4>
-                  <p>—</p>
-                </div>
-                <div className="info-box">
-                  <h4>Account Type</h4>
-                  <p>Standard User</p>
-                </div>
+            <dl className="profile-meta">
+              <div>
+                <dt>Wallet Address</dt>
+                <dd className="mono-text">
+                  {userAddress || "Not Available"}
+                </dd>
               </div>
+              <div>
+                <dt>Joined</dt>
+                <dd>{joinedDate}</dd>
+              </div>
+              <div>
+                <dt>Friends</dt>
+                <dd>{friendCount}</dd>
+              </div>
+              <div>
+                <dt>Account Type</dt>
+                <dd>Standard User</dd>
+              </div>
+            </dl>
+          </div>
 
-              {!isConnected ? (
-                <button className="logout-btn" onClick={connectWallet}>
-                  🔗 Connect Wallet
-                </button>
-              ) : (
-                <button className="logout-btn" onClick={() => navigate("/")}>
-                  🔐 Disconnect Wallet
-                </button>
-              )}
-            </>
-          )}
+          <div className="glass-card secondary">
+            <div className="card-heading">
+              <h2>Identity Summary</h2>
+              <p>Your decentralized user data fetched directly from the blockchain.</p>
+            </div>
+            <ul className="notification-list">
+              <li>
+                <strong>Username</strong>
+                <p>{username}</p>
+              </li>
+              <li>
+                <strong>Friend Count</strong>
+                <p>{friendCount}</p>
+              </li>
+              <li>
+                <strong>Wallet</strong>
+                <p className="mono-text">{account}</p>
+              </li>
+              <li>
+                <strong>Connected Network</strong>
+                <p>Local Hardhat (ChainId: 31337)</p>
+              </li>
+            </ul>
+          </div>
+
+          <div className="glass-card secondary">
+            <div className="card-heading">
+              <h2>On-chain Insights</h2>
+              <p>Summary of your verified on-chain interactions.</p>
+            </div>
+            <ul className="metric-grid">
+              <li className="metric-card">
+                <strong>{friendCount}</strong>
+                <span>Friends</span>
+                <p className="list-subtitle">People you’ve added</p>
+              </li>
+              <li className="metric-card">
+                <strong>{username ? "✔️" : "❌"}</strong>
+                <span>Registered</span>
+                <p className="list-subtitle">
+                  {username ? "Account Verified" : "Not registered yet"}
+                </p>
+              </li>
+              <li className="metric-card">
+                <strong>100%</strong>
+                <span>Data Sync</span>
+                <p className="list-subtitle">Profile is up to date</p>
+              </li>
+            </ul>
+          </div>
         </div>
-      </main>
-
-      <footer className="profile-footer">
-        <p>🧩 Built for Web3 • CryptoComm</p>
-      </footer>
-    </div>
+      )}
+    </section>
   );
 };
 

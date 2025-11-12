@@ -1,4 +1,4 @@
- [
+[
     {
       "inputs": [
         {
@@ -34,12 +34,89 @@
         {
           "indexed": false,
           "internalType": "string",
-          "name": "encryptedMessage",
+          "name": "message",
           "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "msgType",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
         }
       ],
       "name": "MessageSent",
       "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_friendKey",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "getMessageByIndex",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "timestamp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "message",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "msgType",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct MessageStorage.Message",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_friendKey",
+          "type": "address"
+        }
+      ],
+      "name": "getMessageCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "inputs": [
@@ -67,6 +144,11 @@
               "internalType": "string",
               "name": "message",
               "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "msgType",
+              "type": "string"
             }
           ],
           "internalType": "struct MessageStorage.Message[]",
@@ -87,6 +169,11 @@
         {
           "internalType": "string",
           "name": "_msg",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_msgType",
           "type": "string"
         }
       ],

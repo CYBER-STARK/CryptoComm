@@ -1,5 +1,5 @@
 /* ====== CryptoComm Chat Page ====== */
-
+/*
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
@@ -13,7 +13,7 @@ body {
   height: 100vh;
 }
 
-/* Sidebar */
+
 .chat-sidebar {
   width: 280px;
   background: rgba(15, 15, 15, 0.95);
@@ -76,7 +76,7 @@ body {
   cursor: pointer;
 }
 
-/* Chat Main */
+
 .chat-main {
   flex-grow: 1;
   display: flex;
@@ -119,7 +119,6 @@ body {
   color: #000;
 }
 
-/* Messages */
 .chat-messages {
   flex-grow: 1;
   padding: 20px;
@@ -166,7 +165,7 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Input */
+
 .chat-input {
   display: flex;
   padding: 15px 25px;
@@ -201,3 +200,13 @@ body {
   transform: scale(1.05);
   box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
 }
+.file-message {
+  color: #ff7a00;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.file-message:hover {
+  text-decoration: underline;
+}
+*/

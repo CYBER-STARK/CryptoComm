@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ethers } from "ethers";
+import lighthouse from "@lighthouse-web3/sdk";
 import { Web3Context } from "../context/Web3Context.jsx";
 import messageABI from "../utils/messageABI.json";
 import userABI from "../utils/userABI.json";
@@ -13,16 +14,18 @@ const ChatPage = () => {
   const chatEndRef = useRef(null);
 
   // ✅ Replace with your deployed contract addresses
-  const messageContractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
-  const userContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  const userContractAddress = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
+  const messageContractAddress = "0x0165878A594ca255338adfa4d48449f69242Eb8F";
 
   const [friends, setFriends] = useState([]);
+  const [filteredFriends, setFilteredFriends] = useState([]);
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
 
-  // 🔹 Fetch real friends from blockchain
+  // 🔹 Fetch user's friends from blockchain
   const fetchFriends = async () => {
     if (!isConnected || !account) return;
     try {
@@ -31,22 +34,32 @@ const ChatPage = () => {
       const signer = await provider.getSigner();
       const userContract = new ethers.Contract(userContractAddress, userABI, signer);
 
-      const [name, addr, friendList] = await userContract.getUser(account);
+      const [_, __, friendList] = await userContract.getUser(account);
 
-      const formattedFriends = friendList.map((f, i) => ({
-        id: i + 1,
-        name: `Friend ${i + 1}`,
-        address: f,
-      }));
+      const formattedFriends = await Promise.all(
+        friendList.map(async (f, i) => {
+          try {
+            const [friendName] = await userContract.getUser(f);
+            return {
+              id: i + 1,
+              name: friendName || `Friend ${i + 1}`,
+              address: f,
+            };
+          } catch {
+            return { id: i + 1, name: `Friend ${i + 1}`, address: f };
+          }
+        })
+      );
+
       setFriends(formattedFriends);
+      setFilteredFriends(formattedFriends);
 
-      // Default to first friend or location.state.friend
       if (location.state?.friend) {
         const existing = formattedFriends.find(
           (f) => f.address.toLowerCase() === location.state.friend.toLowerCase()
         );
         setSelectedFriend(
-          existing || { name: "Friend", address: location.state.friend }
+          existing || { name: "Unknown", address: location.state.friend }
         );
       } else if (formattedFriends.length > 0) {
         setSelectedFriend(formattedFriends[0]);
@@ -56,7 +69,23 @@ const ChatPage = () => {
     }
   };
 
-  // 🔹 Fetch messages from blockchain
+  // 🔹 Filter friends with search
+  useEffect(() => {
+    if (search.trim() === "") {
+      setFilteredFriends(friends);
+    } else {
+      const lower = search.toLowerCase();
+      setFilteredFriends(
+        friends.filter(
+          (f) =>
+            f.name.toLowerCase().includes(lower) ||
+            f.address.toLowerCase().includes(lower)
+        )
+      );
+    }
+  }, [search, friends]);
+
+  // 🔹 Fetch messages between user and selected friend
   const fetchMessages = async () => {
     if (!isConnected || !selectedFriend?.address) return;
     try {
@@ -72,6 +101,7 @@ const ChatPage = () => {
         id: i + 1,
         sender: m.sender.toLowerCase() === account.toLowerCase() ? "me" : "friend",
         text: m.message,
+        type: m.msgType || "text",
         time: new Date(Number(m.timestamp) * 1000).toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -86,7 +116,7 @@ const ChatPage = () => {
     }
   };
 
-  // 🔹 Send message on blockchain
+  // 🔹 Send a text message
   const sendMessage = async () => {
     if (!isConnected) return alert("Connect your wallet first!");
     if (newMessage.trim() === "") return alert("Message cannot be empty!");
@@ -98,7 +128,7 @@ const ChatPage = () => {
       const signer = await provider.getSigner();
       const messageContract = new ethers.Contract(messageContractAddress, messageABI, signer);
 
-      const tx = await messageContract.sendMessage(selectedFriend.address, newMessage);
+      const tx = await messageContract.sendMessage(selectedFriend.address, newMessage, "text");
       await tx.wait();
 
       setNewMessage("");
@@ -111,12 +141,44 @@ const ChatPage = () => {
     }
   };
 
+  // 🔹 Upload file via Lighthouse and send IPFS link
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!selectedFriend?.address) return alert("Select a friend first!");
+
+    try {
+      setLoading(true);
+      const output = await lighthouse.upload(
+           [file], // must be an array
+           import.meta.env.VITE_LIGHTHOUSE_API_KEY
+            );
+      const fileLink = `https://gateway.lighthouse.storage/ipfs/${output.data.Hash}`;
+
+      const network = { chainId: 31337, name: "hardhat" };
+      const provider = new ethers.BrowserProvider(window.ethereum, network);
+      const signer = await provider.getSigner();
+      const messageContract = new ethers.Contract(messageContractAddress, messageABI, signer);
+
+      const tx = await messageContract.sendMessage(selectedFriend.address, fileLink, "file");
+      await tx.wait();
+
+      alert("📁 File sent successfully!");
+      await fetchMessages();
+    } catch (error) {
+      console.error("File upload failed:", error);
+      alert("File upload or transaction failed!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // 🔹 Auto scroll
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // 🔹 Auto load messages & friends
+  // 🔹 Initial fetch
   useEffect(() => {
     if (isConnected) fetchFriends();
   }, [isConnected, account]);
@@ -129,21 +191,32 @@ const ChatPage = () => {
     <div className="chat-container">
       {/* Sidebar */}
       <aside className="chat-sidebar">
-        <h2>💬 Chats</h2>
+        <div className="sidebar-header">
+          <h2>💬 Chats</h2>
+          <button onClick={() => navigate("/friends")}>👥 Friends</button>
+        </div>
+
+        <div className="sidebar-search">
+          <input
+            type="text"
+            placeholder="Search friends..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
         {!isConnected ? (
           <button onClick={connectWallet} className="connect-btn">
             🔗 Connect MetaMask
           </button>
-        ) : friends.length === 0 ? (
-          <p>No friends yet. Add some first!</p>
+        ) : filteredFriends.length === 0 ? (
+          <p>No friends yet.</p>
         ) : (
           <ul className="friend-list">
-            {friends.map((f) => (
+            {filteredFriends.map((f) => (
               <li
                 key={f.id}
-                className={`friend-item ${
-                  selectedFriend?.address === f.address ? "active" : ""
-                }`}
+                className={`friend-item ${selectedFriend?.address === f.address ? "active" : ""}`}
                 onClick={() => setSelectedFriend(f)}
               >
                 <p className="friend-name">{f.name}</p>
@@ -154,13 +227,9 @@ const ChatPage = () => {
             ))}
           </ul>
         )}
-
-        <button onClick={() => navigate("/friends")} className="back-btn">
-          👥 Back to Friends
-        </button>
       </aside>
 
-      {/* Main Chat */}
+      {/* Main Chat Window */}
       <main className="chat-main">
         {selectedFriend ? (
           <>
@@ -179,11 +248,19 @@ const ChatPage = () => {
                 <p>⏳ Loading messages...</p>
               ) : messages.length > 0 ? (
                 messages.map((m) => (
-                  <div
-                    key={m.id}
-                    className={`message ${m.sender === "me" ? "sent" : "received"}`}
-                  >
-                    <p className="message-text">{m.text}</p>
+                  <div key={m.id} className={`message ${m.sender === "me" ? "sent" : "received"}`}>
+                    {m.type === "file" ? (
+                      <a
+                        href={m.text}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="file-message"
+                      >
+                        📎 View File
+                      </a>
+                    ) : (
+                      <p className="message-text">{m.text}</p>
+                    )}
                     <span className="message-time">{m.time}</span>
                   </div>
                 ))
@@ -194,6 +271,13 @@ const ChatPage = () => {
             </div>
 
             <div className="chat-input">
+              <label htmlFor="file-upload" className="file-label">📎</label>
+              <input
+                id="file-upload"
+                type="file"
+                style={{ display: "none" }}
+                onChange={handleFileUpload}
+              />
               <input
                 type="text"
                 placeholder="Type your message..."
@@ -202,7 +286,7 @@ const ChatPage = () => {
                 onKeyPress={(e) => e.key === "Enter" && sendMessage()}
               />
               <button onClick={sendMessage} disabled={loading}>
-                📩 Send
+                📩
               </button>
             </div>
           </>
