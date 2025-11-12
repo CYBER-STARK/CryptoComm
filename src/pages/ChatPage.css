@@ -23,6 +23,7 @@ body {
   font-family: "Poppins", sans-serif;
   background: var(--bg);
   color: var(--text);
+
 }
 
 /* Layout */
@@ -149,7 +150,7 @@ body {
 
 /* Header */
 .chat-header {
-  background: transparent;
+  background: #f4f1ed;
   padding: 18px 22px;
   border-bottom: 1px solid var(--border);
   display: flex;
@@ -217,7 +218,8 @@ body {
 
 .message.sent {
   align-self: flex-end;
-  background: linear-gradient(90deg, var(--accent-1), var(--accent-2)); /* shows orange now */
+  background: linear-gradient(90deg, #ffe8d1, #ffd7b5);
+ /* shows orange now */
   color: #042024;
   border-bottom-right-radius: 6px;
 }

@@ -237,7 +237,7 @@ const ChatPage = () => {
         {selectedFriend ? (
           <>
             <header className="chat-header">
-              <div>
+              <div className="chat-friend-info">
                 <h3>{selectedFriend.name}</h3>
                 <p className="chat-address">{selectedFriend.address}</p>
               </div>
