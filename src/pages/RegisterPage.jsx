@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
-import { ethers } from "ethers";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ethers } from "ethers";
 import { Web3Context } from "../context/Web3Context.jsx";
-import TopNavBar from "./TopNavBar.jsx"
+import TopNavBar from "./TopNavBar.jsx";
 import userABI from "../utils/userABI.json";
 import "./pageTheme.css";
 
@@ -13,57 +13,61 @@ const RegisterPage = () => {
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
   const navigate = useNavigate();
 
-  // 🔹 Replace with your deployed contract address
-  const contractAddress = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
-
-  // ✅ Connect to contract
-  const getContract = async () => {
-    const provider = new ethers.BrowserProvider(window.ethereum);
-    const signer = await provider.getSigner();
-    return new ethers.Contract(contractAddress, userABI, signer);
-  };
+  // ✅ Replace with your deployed contract address
+  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
   // 🔍 Check if user already exists
-  const checkUserStatus = async () => {
-    if (!isConnected || !account) return;
-    try {
-      const contract = await getContract();
-      const exists = await contract.userExists(account);
-      if (exists) {
-        setAlreadyRegistered(true);
-        setTimeout(() => navigate("/dashboard"), 1200);
-      }
-    } catch (error) {
-      console.error("Error checking user status:", error);
-    }
-  };
-
   useEffect(() => {
+    const checkUserStatus = async () => {
+      if (!isConnected || !account) return;
+      try {
+        const network = { chainId: 31337, name: "hardhat" };
+        const provider = new ethers.BrowserProvider(window.ethereum, network);
+        const signer = await provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, userABI, signer);
+
+        const code = await provider.getCode(contractAddress);
+        if (code === "0x") {
+          console.error("❌ Contract not found. Redeploy or update address.");
+          return;
+        }
+
+        const exists = await contract.userExists(account);
+        if (exists) {
+          setAlreadyRegistered(true);
+          //setTimeout(() => navigate("/dashboard"), 1500);
+        }
+      } catch (err) {
+        console.error("Error checking user:", err);
+      }
+    };
     checkUserStatus();
-  }, [isConnected, account]);
+  }, [isConnected, account, navigate]);
 
   // 🧩 Register user
   const registerUser = async () => {
     if (!isConnected) return alert("Please connect your wallet first!");
-    if (username.trim() === "") return alert("Enter a username!");
+    if (username.trim() === "") return alert("Please enter a username!");
 
     try {
       setLoading(true);
-      const contract = await getContract();
+      const network = { chainId: 31337, name: "hardhat" };
+      const provider = new ethers.BrowserProvider(window.ethereum, network);
+      const signer = await provider.getSigner();
+      const contract = new ethers.Contract(contractAddress, userABI, signer);
+
       const tx = await contract.createAccount(username);
       await tx.wait();
 
       alert("🎉 Registration successful!");
       navigate("/dashboard");
     } catch (error) {
-      console.error("Registration failed:", error);
-      if (error.message.includes("User already exists")) {
+      console.error("Registration error:", error);
+      if (error.message.includes("User already exists"))
         alert("This account already exists!");
-      } else if (error.message.includes("Username already taken")) {
+      else if (error.message.includes("Username already taken"))
         alert("This username is already taken!");
-      } else {
-        alert("Transaction failed. Check console for details.");
-      }
+      else alert("Registration failed. Check console for details.");
     } finally {
       setLoading(false);
     }
@@ -71,109 +75,101 @@ const RegisterPage = () => {
 
   return (
     <section className="page-section">
-      <TopNavBar></TopNavBar>
+      <TopNavBar/>
       <header className="page-header">
-        <h1>Create Your CryptoComm Identity</h1>
+        <h1>Create Your CryptoComm Account</h1>
         <p>
-          Register a unique username and start building your on-chain profile.
-          Your identity is permanently stored on the blockchain.
+          Register your decentralized identity to join the CryptoComm network.
+          Your profile and data are securely stored on the blockchain.
         </p>
       </header>
 
-      {!isConnected ? (
-        <div style={{ textAlign: "center", marginTop: "50px" }}>
-          <button className="primary-btn" onClick={connectWallet}>
-            🔗 Connect MetaMask
-          </button>
-        </div>
-      ) : (
-        <div className="content-grid">
-          <form
-            className="glass-card focus form-card"
-            onSubmit={(e) => {
-              e.preventDefault();
-              registerUser();
-            }}
-          >
-            <div className="card-heading">
-              <h2>Register Profile</h2>
-              <p>Choose your public username for CryptoComm.</p>
+      <div className="content-grid dual">
+        {/* Registration Form Card */}
+        <div className="glass-card focus form-card">
+          <div className="card-heading">
+            <h2>🪄 Register on CryptoComm</h2>
+            <p>Choose a unique username to create your account.</p>
+          </div>
+
+          {!isConnected ? (
+            <button className="primary-btn" onClick={connectWallet}>
+              🔗 Connect MetaMask
+            </button>
+          ) : (
+            <div className="wallet-chip">
+              ✅ Connected: {account.slice(0, 6)}...{account.slice(-4)}
             </div>
+          )}
 
-            <label className="form-field">
-              <span>Username (on-chain)</span>
-              <input
-                required
-                maxLength={32}
-                name="username"
-                placeholder="e.g. satoshi"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </label>
+          {alreadyRegistered ? (
+            <p className="callout success">
+              🎉 You’re already registered! Redirecting to Dashboard...
+            </p>
+          ) : (
+            <>
+              <div className="form-field">
+                <span>Username</span>
+                <input
+                  type="text"
+                  placeholder="Enter your unique username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </div>
 
-            <div className="form-field">
-              <span>Wallet Address</span>
-              <p className="mono-text">{account}</p>
-            </div>
-
-            {alreadyRegistered ? (
-              <p className="callout success">
-                ✅ You’re already registered. Redirecting to Dashboard...
-              </p>
-            ) : (
               <button
-                type="submit"
                 className="primary-btn"
+                onClick={registerUser}
                 disabled={loading || !isConnected}
               >
                 {loading ? "⏳ Registering..." : "📝 Create Account"}
               </button>
-            )}
 
-            <p className="note">
-              Once registered, your username will be permanently linked to your
-              wallet on Ethereum.
+              <p className="note list-subtitle">
+                Once registered, your username is stored permanently on-chain.
+              </p>
+            </>
+          )}
+        </div>
+
+        {/* Info / Tips Card */}
+        <div className="glass-card secondary">
+          <div className="card-heading">
+            <h2>Why Register?</h2>
+            <p>
+              Registering links your wallet to a unique username and unlocks
+              personalized blockchain-based features.
             </p>
-          </form>
+          </div>
 
-          <div className="glass-card secondary">
-            <div className="card-heading">
-              <h2>Why Register?</h2>
+          <ul className="feature-list">
+            <li>✔️ Secure, blockchain-verified identity</li>
+            <li>💬 Access decentralized chat and friends network</li>
+            <li>🔐 No passwords or centralized storage</li>
+            <li>🌐 Instant access to the CryptoComm ecosystem</li>
+          </ul>
+
+          <div className="metric-grid">
+            <div className="metric-card">
+              <strong>10k+</strong>
+              <span>Registered Users</span>
             </div>
-            <ul className="feature-list">
-              <li>End-to-end encrypted chat tied to your wallet</li>
-              <li>Secure decentralized storage via IPFS</li>
-              <li>Unique username anchored on blockchain</li>
-              <li>Verified reputation through smart contracts</li>
-            </ul>
-
-            <div className="metric-grid">
-              <div className="metric-card">
-                <strong>10k+</strong>
-                <span>Active Users</span>
-                <p className="list-subtitle">
-                  Verified on-chain user identities
-                </p>
-              </div>
-              <div className="metric-card">
-                <strong>1.2h</strong>
-                <span>Avg. Approval Time</span>
-                <p className="list-subtitle">
-                  From registration to dashboard access
-                </p>
-              </div>
-              <div className="metric-card">
-                <strong>99%</strong>
-                <span>Success Rate</span>
-                <p className="list-subtitle">
-                  Verified transactions via MetaMask
-                </p>
-              </div>
+            <div className="metric-card">
+              <strong>3s</strong>
+              <span>Average Transaction Time</span>
+            </div>
+            <div className="metric-card">
+              <strong>100%</strong>
+              <span>Data Ownership</span>
             </div>
           </div>
         </div>
-      )}
+      </div>
+
+      <footer className="page-footer">
+        <p>Powered by Ethereum • Built with ❤️ by CryptoComm</p>
+      </footer>
     </section>
   );
 };

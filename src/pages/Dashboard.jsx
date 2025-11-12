@@ -1,5 +1,5 @@
 import './pageTheme.css';
-
+import TopNavBar from "./TopNavBar.jsx";
 const highlights = [
   { label: 'Encrypted Threads', value: '27', trend: '+6 today · 4 handoffs pending' },
   { label: 'Trusted Contacts', value: '31', trend: '5 mutual confirmations awaiting' },
@@ -111,6 +111,7 @@ const networkHealth = [
 function Dashboard() {
   return (
     <section className="page-section">
+      <TopNavBar title="Dashboard"/>
       <header className="page-header">
         <h1>Dashboard</h1>
         <p>

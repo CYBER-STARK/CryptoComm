@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useContext } from "react";
 import { ethers } from "ethers";
 import { Web3Context } from "../context/Web3Context.jsx";
 import userABI from "../utils/userABI.json";
+import TopNavBar from "./TopNavBar.jsx";
 import "./pageTheme.css";
 
 const FriendsPage = () => {
@@ -14,7 +15,7 @@ const FriendsPage = () => {
   const [loading, setLoading] = useState(false);
 
   // Replace with your actual deployed address
-  const contractAddress = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
+  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
   // ✅ Connect to contract
   const getContract = async () => {
@@ -120,6 +121,7 @@ const FriendsPage = () => {
 
   return (
     <section className="page-section">
+      <TopNavBar title="Friends"/>
       <header className="page-header">
         <h1>Find and Add Friends</h1>
         <p>

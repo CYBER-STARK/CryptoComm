@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ethers } from "ethers";
@@ -14,8 +15,8 @@ const ChatPage = () => {
   const chatEndRef = useRef(null);
 
   // ✅ Replace with your deployed contract addresses
-  const userContractAddress = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
-  const messageContractAddress = "0x0165878A594ca255338adfa4d48449f69242Eb8F";
+  const userContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  const messageContractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
   const [friends, setFriends] = useState([]);
   const [filteredFriends, setFilteredFriends] = useState([]);
@@ -150,9 +151,9 @@ const ChatPage = () => {
     try {
       setLoading(true);
       const output = await lighthouse.upload(
-           [file], // must be an array
-           import.meta.env.VITE_LIGHTHOUSE_API_KEY
-            );
+        [file], // must be an array
+        import.meta.env.VITE_LIGHTHOUSE_API_KEY
+      );
       const fileLink = `https://gateway.lighthouse.storage/ipfs/${output.data.Hash}`;
 
       const network = { chainId: 31337, name: "hardhat" };
@@ -181,10 +182,12 @@ const ChatPage = () => {
   // 🔹 Initial fetch
   useEffect(() => {
     if (isConnected) fetchFriends();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, account]);
 
   useEffect(() => {
     if (selectedFriend) fetchMessages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFriend]);
 
   return (
@@ -270,13 +273,16 @@ const ChatPage = () => {
               <div ref={chatEndRef} />
             </div>
 
+            {/* Chat input (frontend-only changes: class names + removed inline style on file input) */}
             <div className="chat-input">
-              <label htmlFor="file-upload" className="file-label">📎</label>
+              {/* file-label class is styled in the updated CSS; clicking it opens the hidden file input */}
+              <label htmlFor="file-upload" className="file-label" title="Attach file">📎</label>
               <input
                 id="file-upload"
                 type="file"
-                style={{ display: "none" }}
                 onChange={handleFileUpload}
+                accept="image/*, .pdf, .doc, .docx, .txt"
+                /* Hidden via CSS (#file-upload { display: none; }) so inline style removed. */
               />
               <input
                 type="text"
@@ -285,7 +291,8 @@ const ChatPage = () => {
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && sendMessage()}
               />
-              <button onClick={sendMessage} disabled={loading}>
+              {/* send button now has .send-btn to match the new CSS (orange gradient) */}
+              <button className="send-btn" onClick={sendMessage} disabled={loading}>
                 📩
               </button>
             </div>
@@ -301,3 +308,4 @@ const ChatPage = () => {
 };
 
 export default ChatPage;
+

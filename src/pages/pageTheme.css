@@ -436,7 +436,9 @@ body {
   gap: 1.5rem;
   flex-wrap: wrap;
 }
-
+.mono-text {
+  overflow-x: hidden;
+}
 .avatar-circle {
   width: 64px;
   height: 64px;
@@ -771,4 +773,104 @@ color: #ffffff;
 @media (max-width: 768px) {
 .search-wrap { max-width: 240px; }
 .brand-title { font-size: 1rem; }
+}
+/* ===== Top Navigation Bar ===== */
+.nav-header {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
+  border-bottom: 1px solid rgba(249, 115, 22, 0.1);
+  padding: 0.75rem 1.5rem;
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 1rem;
+}
+
+/* Brand */
+.brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.brand-name {
+  font-weight: 700;
+  color: #f97316;
+  font-size: 1.25rem;
+}
+
+.avatar-circle.small {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #fb923c, #f97316);
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Links */
+.nav-links {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.nav-links button {
+  background: transparent;
+  border: none;
+  color: #0f172a;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.nav-links button:hover {
+  background: #fff7ed;
+  color: #f97316;
+}
+
+/* Actions */
+.nav-actions .logout-btn {
+  background: linear-gradient(135deg, #fb923c, #f97316);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-actions .logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(249, 115, 22, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-inner {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }

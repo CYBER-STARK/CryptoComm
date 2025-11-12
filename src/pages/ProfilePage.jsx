@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo, useContext } from "react";
 import { ethers } from "ethers";
 import { Web3Context } from "../context/Web3Context.jsx";
 import userABI from "../utils/userABI.json";
+import TopNavBar from "./TopNavBar.jsx";
 import "./pageTheme.css";
 
 const ProfilePage = () => {
@@ -14,7 +15,7 @@ const ProfilePage = () => {
   const [userAddress, setUserAddress] = useState("");
 
   // Replace with your deployed UserRegistration address
-  const contractAddress = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
+  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
   // 🔹 Connect to the blockchain contract
   const getContract = async () => {
@@ -60,6 +61,7 @@ const ProfilePage = () => {
 
   return (
     <section className="page-section">
+      <TopNavBar title="Profile"/>
       <header className="page-header">
         <h1>Your Profile</h1>
         <p>Manage your identity and on-chain footprint on CryptoComm.</p>
