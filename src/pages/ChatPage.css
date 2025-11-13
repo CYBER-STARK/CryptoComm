@@ -53,6 +53,7 @@ body {
   align-items:center;
   justify-content:space-between;
   margin-bottom: 12px;
+  background: #f4f1ed;
 }
 .sidebar-header h2 {
   margin: 0;
@@ -113,7 +114,7 @@ body {
   margin-bottom: 10px;
   cursor: pointer;
   transition: background 0.18s, transform 0.08s;
-  border: 1px solid transparent;
+  border: 1px solid rgba(255, 136, 0, 0.729);
 }
 .friend-item:hover {
   background: #ffffff;
@@ -122,8 +123,8 @@ body {
   box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
 }
 .friend-item.active {
-  background: linear-gradient(90deg, rgba(255,138,0,0.06), rgba(255,200,87,0.03));
-  border: 1px solid rgba(255,138,0,0.12);
+  background: #ffd9b8;
+  border: 1px solid rgb(255, 136, 0);
 }
 .friend-name {
   font-weight: 600;
@@ -345,4 +346,114 @@ body {
   .chat-main { order: 1; width: 100%; }
   .chat-container { flex-direction: column; height: auto; padding: 8px; }
 }
+.file-bubble {
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 0.8rem;
+  padding: 0.6rem 0.8rem;
+  margin-top: 0.3rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  max-width: 65%; /* reduced from 80% for smaller width */
+  font-size: 0.85rem;
+  line-height: 1.3;
+}
 
+.file-bubble h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.file-bubble strong {
+  color: #ff8800;
+  font-size: 0.85rem;
+}
+.file-bubble p {
+  margin: 0.2rem 0;
+  color: #000;
+}
+
+.file-actions {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+}
+
+.file-actions .primary-btn,
+.file-actions .secondary-btn {
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.file-actions .primary-btn {
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  border: none;
+  color: white;
+}
+
+.file-actions .secondary-btn {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: #000;
+}
+
+.file-actions .primary-btn:hover,
+.file-actions .secondary-btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+/* Circular gradient avatar */
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffa62e, #ff6f00);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  flex-shrink: 0;
+}
+
+.profile-avatar:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(255, 136, 0, 0.4);
+}
+
+/* Keep "Chats" centered visually even with avatar */
+.sidebar-header h2 {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+}
+
+/* Friends button */
+.friends-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.6rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.friends-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}

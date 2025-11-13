@@ -111,58 +111,11 @@ const ProfilePage = () => {
                 <dt>Account Type</dt>
                 <dd>Standard User</dd>
               </div>
+              <div>
+                <dt>Connected Network</dt>
+                <dd>Local Hardhat (ChainId: 31337)</dd>
+              </div>
             </dl>
-          </div>
-
-          <div className="glass-card secondary">
-            <div className="card-heading">
-              <h2>Identity Summary</h2>
-              <p>Your decentralized user data fetched directly from the blockchain.</p>
-            </div>
-            <ul className="notification-list">
-              <li>
-                <strong>Username</strong>
-                <p>{username}</p>
-              </li>
-              <li>
-                <strong>Friend Count</strong>
-                <p>{friendCount}</p>
-              </li>
-              <li>
-                <strong>Wallet</strong>
-                <p className="mono-text">{account}</p>
-              </li>
-              <li>
-                <strong>Connected Network</strong>
-                <p>Local Hardhat (ChainId: 31337)</p>
-              </li>
-            </ul>
-          </div>
-
-          <div className="glass-card secondary">
-            <div className="card-heading">
-              <h2>On-chain Insights</h2>
-              <p>Summary of your verified on-chain interactions.</p>
-            </div>
-            <ul className="metric-grid">
-              <li className="metric-card">
-                <strong>{friendCount}</strong>
-                <span>Friends</span>
-                <p className="list-subtitle">People you’ve added</p>
-              </li>
-              <li className="metric-card">
-                <strong>{username ? "✔️" : "❌"}</strong>
-                <span>Registered</span>
-                <p className="list-subtitle">
-                  {username ? "Account Verified" : "Not registered yet"}
-                </p>
-              </li>
-              <li className="metric-card">
-                <strong>100%</strong>
-                <span>Data Sync</span>
-                <p className="list-subtitle">Profile is up to date</p>
-              </li>
-            </ul>
           </div>
         </div>
       )}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useContext } from "react";
 import { ethers } from "ethers";
+import { useNavigate } from "react-router-dom";
 import { Web3Context } from "../context/Web3Context.jsx";
 import userABI from "../utils/userABI.json";
 import TopNavBar from "./TopNavBar.jsx";
@@ -7,6 +8,7 @@ import "./pageTheme.css";
 
 const FriendsPage = () => {
   const { account, isConnected, connectWallet } = useContext(Web3Context);
+  const navigate = useNavigate();
 
   const [query, setQuery] = useState("");
   const [friends, setFriends] = useState([]);
@@ -14,7 +16,6 @@ const FriendsPage = () => {
   const [searchResult, setSearchResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Replace with your actual deployed address
   const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
   // ✅ Connect to contract
@@ -108,6 +109,37 @@ const FriendsPage = () => {
     }
   };
 
+  // ❌ Remove a friend
+  const handleRemoveFriend = async (friend) => {
+    if (!isConnected) return alert("Connect wallet first!");
+    if (!friend) return;
+
+    const confirm = window.confirm(
+      `Are you sure you want to remove @${friend.username}?`
+    );
+    if (!confirm) return;
+
+    try {
+      setLoading(true);
+      const contract = await getContract();
+      const tx = await contract.removeFriend(friend.address);
+      await tx.wait();
+
+      alert(`🗑 Removed @${friend.username} successfully!`);
+      fetchFriends();
+    } catch (error) {
+      console.error("Remove friend failed:", error);
+      alert("Transaction failed. Check console for details.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 💬 Open chat when clicking on friend
+  const openChat = (friend) => {
+    navigate("/chat", { state: { friendAddress: friend.address, friendName: friend.username } });
+  };
+
   useEffect(() => {
     if (isConnected) fetchFriends();
   }, [isConnected, account]);
@@ -121,12 +153,13 @@ const FriendsPage = () => {
 
   return (
     <section className="page-section">
-      <TopNavBar title="Friends"/>
+      <TopNavBar title="Friends" />
+
       <header className="page-header">
-        <h1>Find and Add Friends</h1>
+        <h1>Find, Add, and Manage Friends</h1>
         <p>
-          Search for friends by username or wallet address. Add them to your
-          on-chain friend list and start chatting securely.
+          Search for friends by username or wallet address. Add, remove, or chat
+          directly — all stored securely on-chain.
         </p>
       </header>
 
@@ -136,23 +169,37 @@ const FriendsPage = () => {
         </button>
       ) : (
         <div className="content-grid dual">
+          {/* Friends List */}
           <div className="glass-card focus">
             <div className="card-heading">
               <h2>Your Friends</h2>
-              <p>All your added friends appear here with their wallet addresses.</p>
+              <p>Tap a friend to open chat or remove them.</p>
             </div>
 
             {loading ? (
               <p>⏳ Loading...</p>
             ) : friends.length > 0 ? (
-              <ul className="user-list">
+              <ul className="user-list clickable-list">
                 {filteredUsers.map((f) => (
-                  <li key={f.address}>
-                    <div>
+                  <li key={f.address} className="clickable-item">
+                    <div className="friend-info" onClick={() => openChat(f)}>
                       <strong>@{f.username}</strong>
                       <span>{f.address}</span>
                     </div>
-                    <span className="pill subtle">Friend</span>
+                    <div className="friend-actions">
+                      <button
+                        className="pill subtle"
+                        onClick={() => openChat(f)}
+                      >
+                        💬 Chat
+                      </button>
+                      <button
+                        className="pill danger"
+                        onClick={() => handleRemoveFriend(f)}
+                      >
+                        🗑 Remove
+                      </button>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -161,6 +208,7 @@ const FriendsPage = () => {
             )}
           </div>
 
+          {/* Search & Add Section */}
           <div className="glass-card secondary">
             <div className="card-heading">
               <h2>Search & Add Friends</h2>
@@ -179,15 +227,27 @@ const FriendsPage = () => {
             </div>
 
             {searchResult && (
-              <div className="search-result">
-                <p>
-                  Found: <strong>@{searchResult.username}</strong>
-                </p>
-                <span>{searchResult.address}</span>
-                <button onClick={handleAddFriend} disabled={loading}>
-                  {loading ? "⏳ Adding..." : "➕ Add Friend"}
-                </button>
-              </div>
+              <div className="search-result glass-card pop-card">
+              <div className="result-info">
+              <div className="avatar-circle small-accent">
+             {searchResult.username.charAt(0).toUpperCase()}
+             </div>
+           <div className="result-details">
+          <h3>@{searchResult.username}</h3>
+          <p className="address-text">{searchResult.address}</p>
+          </div>
+        </div>
+        <div className="result-actions">
+       <button
+      className={`primary-btn ${loading ? "disabled" : ""}`}
+      onClick={handleAddFriend}
+      disabled={loading}
+       >
+      {loading ? "⏳ Adding..." : "➕ Add Friend"}
+      </button>
+       </div>
+        </div>
+
             )}
 
             <div className="pending-section">

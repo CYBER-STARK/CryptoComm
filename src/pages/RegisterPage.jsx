@@ -134,36 +134,8 @@ const RegisterPage = () => {
         </div>
 
         {/* Info / Tips Card */}
-        <div className="glass-card secondary">
-          <div className="card-heading">
-            <h2>Why Register?</h2>
-            <p>
-              Registering links your wallet to a unique username and unlocks
-              personalized blockchain-based features.
-            </p>
-          </div>
-
-          <ul className="feature-list">
-            <li>✔️ Secure, blockchain-verified identity</li>
-            <li>💬 Access decentralized chat and friends network</li>
-            <li>🔐 No passwords or centralized storage</li>
-            <li>🌐 Instant access to the CryptoComm ecosystem</li>
-          </ul>
-
-          <div className="metric-grid">
-            <div className="metric-card">
-              <strong>10k+</strong>
-              <span>Registered Users</span>
-            </div>
-            <div className="metric-card">
-              <strong>3s</strong>
-              <span>Average Transaction Time</span>
-            </div>
-            <div className="metric-card">
-              <strong>100%</strong>
-              <span>Data Ownership</span>
-            </div>
-          </div>
+        <div className="glass-card tertiary">
+          <img src="src\assets\Gemini_Generated_Image_ezpkv2ezpkv2ezpk.png" alt="Register Illustration" className="info-image" />
         </div>
       </div>
 

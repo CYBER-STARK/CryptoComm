@@ -69,7 +69,15 @@ body {
   background: #f8fafc;
   border-color: #e2e8f0;
 }
-
+.glass-card.tertiary {
+  background: #fffbf5;
+  border-color: #fde4d6;
+  padding: 0;
+}
+.glass-card.tertiary img{
+  border-radius: 20px;
+  padding: 0;
+}
 .card-heading h2 {
   margin: 0;
   font-size: 1.35rem;
@@ -873,4 +881,153 @@ color: #ffffff;
     flex-wrap: wrap;
     justify-content: center;
   }
+}
+/* ===== Clickable Friends ===== */
+.clickable-item {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1rem 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s ease;
+  overflow: clip; /* ✅ prevents button overflow */
+}
+
+.clickable-item:hover {
+  background: #fff7ed;
+  transform: translateY(-2px);
+}
+* Common pill button base */
+.pill {
+  border: none;
+  border-radius: 2rem;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+/* Friend info section */
+.friend-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1; /* ✅ allows text to shrink if needed */
+  word-break: break-all;
+  min-width: 0;
+}
+.friend-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0; /* prevents buttons from collapsing */
+}
+/* Subtle (chat) */
+.pill.subtle {
+  background: rgba(105, 108, 255, 0.08);
+  color: #5c5cfa;
+}
+
+.pill.subtle:hover {
+  background: rgba(105, 108, 255, 0.15);
+  transform: scale(1.05);
+}
+
+/* Danger (remove) */
+.pill.danger {
+  background: rgba(255, 80, 80, 0.08);
+  color: #e83e3e;
+}
+
+.pill.danger:hover {
+  background: rgba(255, 80, 80, 0.18);
+  transform: scale(1.05);
+}
+
+/* Optional — prevent ripple overflow on hover animation */
+.friend-actions button {
+  position: relative;
+  z-index: 1;
+}
+/* ================= Search Result Card ================= */
+.search-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.4rem;
+  border-radius: 1rem;
+  margin-top: 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 10px rgba(255, 136, 0, 0.05);
+}
+
+.search-result:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 165, 0, 0.35);
+  box-shadow: 0 4px 14px rgba(255, 136, 0, 0.12);
+}
+
+/* Avatar circle for found user */
+.avatar-circle.small-accent {
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Result info layout */
+.result-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.result-details h3 {
+  font-size: 1.05rem;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.address-text {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  word-break: break-all;
+}
+
+/* Add Friend button */
+.result-actions .primary-btn {
+  font-size: 0.9rem;
+  padding: 0.6rem 1.2rem;
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  border: none;
+  border-radius: 0.6rem;
+  color: #fff;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.result-actions .primary-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(255, 165, 0, 0.3);
+}
+
+.result-actions .primary-btn.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
