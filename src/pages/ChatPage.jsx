@@ -418,7 +418,6 @@ const fetchCurrentUser = async () => {
                         <p className="message-text">{m.text}</p>
                         {m.isEncrypted && (
                           <span className="encryption-badge" title="End-to-end encrypted">
-                            🔒
                           </span>
                         )}
                       </>
