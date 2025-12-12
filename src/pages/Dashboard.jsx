@@ -49,9 +49,9 @@ function Dashboard() {
 
   return (
     <div className="terminal-page-wrapper">
-      
+      <div className="nav-wrapper-glass">
       <TopNavBar title="Dashboard"/>
-
+      </div>
       <main className="terminal-content">
         
         {/* We use 'key={cycleKey}' here. When this changes, React re-renders 

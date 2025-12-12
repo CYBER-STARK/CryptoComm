@@ -18,14 +18,14 @@ body {
   margin: 0;
   font-size: clamp(2rem, 4vw, 2.75rem);
   font-weight: 700;
-  color: #fff;
+  color: #e6e4e4;
   letter-spacing: -0.01em;
 }
 
 .page-header p {
   margin: 0.75rem 0 0;
   max-width: 640px;
-  color: #E6E6E6;
+  color: #bdbdbd;
   line-height: 1.7;
 }
 
@@ -86,7 +86,7 @@ body {
 
 .card-heading p {
   margin: 0.45rem 0 0;
-  color: #E6E6E6;
+  color: #bdbdbd;
   line-height: 1.6;
 }
 
@@ -465,7 +465,7 @@ body {
 
 .profile-header h2 {
   margin: 0;
-  color: #FFF;
+  color: #e6e4e4;
 }
 
 .profile-header p {
@@ -1313,36 +1313,31 @@ color: #ffffff;
 
 /* 2. NAVBAR OVERRIDE - The "Stuck" Fix */
 /* We use absolute positioning to float it ON TOP of the black screen */
-.terminal-page-wrapper .nav-header {
-  position: absolute !important;
-  
-  /* 1. Detach from the very top */
-  top: 2rem; 
-  
-  /* 2. Center Horizontally */
+/* .terminal-page-wrapper .nav-header {
+  position: absolute;
+  top: 2rem;
   left: 50%;
   transform: translateX(-50%);
-  
-  /* 3. Constrain Width (So it looks like a floating bar, not a full stripe) */
-  width: 90%; 
-  max-width: 1200px; 
-  
-  /* 4. Reset Styles for Terminal Look */
-  height: auto;
-  background: rgba(255,255,255,0.05); /* Change to rgba(255,255,255,0.05) if you want a subtle box */
-  border: none !important;
-  box-shadow: none !important;
-  backdrop-filter: none !important;
-  
-  /* 5. Ensure it sits above everything */
-  z-index: 100;
-  padding: 0.5rem 1rem;
-  border-radius: 999px; /* Rounds the corners if you add a background later */
-}
-.terminal-page-wrapper .nav-inner {
   width: 100%;
-  max-width: 100%;
+  max-width: none;
+  height: auto;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  z-index: 100;
+  padding: 0.65rem 1rem;
+  border-radius: 20px;
+  transition: box-shadow 0.25s ease, backdrop-filter 0.25s ease;
+} */
+
+/* ensure the inner content width matches Friends' .nav-inner constraint */
+.terminal-page-wrapper .nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
+
 
 /* 3. Center Content Properly */
 .terminal-content {
@@ -1454,4 +1449,52 @@ color: #ffffff;
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+.nav-wrapper-glass .nav-header {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  width: 90%;
+  max-width: 1200px;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.15);              
+  border: 1px solid rgba(255, 255, 255, 0.08);  
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  padding: 0.65rem 1rem;
+  border-radius: 20px;
+  z-index: 100;
+}
+
+/* .nav-wrapper-glass:hover{
+  transform: translateX(-1px);
+} */
+
+.nav-wrapper-glass .nav-header:hover {
+  transform: translateX(-50%) translateY(-4px);
+  box-shadow: 0 12px 35px rgba(255, 255, 255, 0.12),
+              0 0 18px rgba(255, 255, 255, 0.18);
+  transition: box-shadow 0.25s ease;
+}
+.nav-wrapper-glass .nav-links button {
+  color: #ffffff;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.nav-wrapper-glass .nav-links button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f97316;
+}
+
+.nav-wrapper-glass .nav-actions .logout-btn {
+  background: linear-gradient(135deg, #fb923c, #f97316);
+  box-shadow: 0 6px 14px rgba(249, 115, 22, 0.3);
+  color: #fff;
+}
+
+.nav-wrapper-glass .nav-inner {
+  max-width: 100%;
+  width: 100%;
 }

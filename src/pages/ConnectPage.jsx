@@ -7,13 +7,13 @@ const ConnectPage = () => {
   const { account, isConnected, connectWallet } = useContext(Web3Context);
 
   return (
-    <div className="page-background-wrapper bg-connect1">
+    <div className="page-background-wrapper bg-connect">
     <section className="page-section">
       <header className="page-header">
         <h1>Connect Your Wallet</h1>
         <p>
           Link your Ethereum wallet to unlock encrypted messaging and personalized features
-          across the CryptoComm network.
+          across the Block-Talk network.
         </p>
       </header>
 
@@ -131,7 +131,7 @@ const ConnectPage = () => {
       </div>  
 
       {/*<footer className="page-footer">
-        <p>Built with ❤️ • CryptoComm © 2025</p>
+        <p>Built with ❤️ • Block-Talk © 2025</p>
       </footer>*/}
     </section>
     </div>

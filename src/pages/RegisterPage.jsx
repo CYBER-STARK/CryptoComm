@@ -216,9 +216,9 @@ const RegisterPage = () => {
       <section className="page-section">
       {/*<TopNavBar/>*/}
       <header className="page-header">
-        <h1>Create Your CryptoComm Account</h1>
+        <h1>Create Your Block-Talk Account</h1>
         <p>
-          Register your decentralized identity to join the CryptoComm network.
+          Register your decentralized identity to join the Block-Talk network.
           Your profile and data are securely stored on the blockchain.
         </p>
       </header>
@@ -227,7 +227,7 @@ const RegisterPage = () => {
         {/* Registration Form Card */}
         <div className="glass-card focus form-card">
           <div className="card-heading">
-            <h2>Register on CryptoComm</h2>
+            <h2>Register on Block-Talk</h2>
             <p>Choose a unique username to create your account.</p>
           </div>
 
@@ -237,7 +237,7 @@ const RegisterPage = () => {
             </button>
           ) : (
             <div className="wallet-chip">
-              ✅ Connected: {account.slice(2, 6)}...{account.slice(-4)}
+              ✅ Connected: {account.slice(2, 6)}xXXXx{account.slice(-4)}
             </div>
           )}
 
@@ -280,7 +280,7 @@ const RegisterPage = () => {
       </div>
 
       {/*<footer className="page-footer">
-        <p>Powered by Ethereum • Built with ❤️ by CryptoComm</p>
+        <p>Powered by Ethereum • Built with ❤️ by Block-Talk</p>
       </footer>*/}
     </section>
     </div>

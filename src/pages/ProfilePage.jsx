@@ -65,7 +65,7 @@ const ProfilePage = () => {
       <TopNavBar title="Profile"/>
       <header className="page-header">
         <h1>Your Profile</h1>
-        <p>Manage your identity and on-chain footprint on CryptoComm.</p>
+        <p>Manage your identity and on-chain footprint on Block-Talk.</p>
       </header>
 
       {!isConnected ? (
@@ -76,7 +76,44 @@ const ProfilePage = () => {
         </div>
       ) : (
         <div className="content-grid">
-          <div className="glass-card focus profile-card">
+          {/* Added relative positioning here to contain the absolute button */}
+          <div className="glass-card focus profile-card" style={{ position: "relative" }}>
+            <button 
+              type="button" 
+              onClick={fetchUserData}
+              title="Refresh Profile"
+              style={{
+                position: "absolute",
+                top: "24px",
+                right: "24px",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                padding: "8px",
+                transition: "transform 0.2s ease",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.transform = "rotate(90deg)"}
+              onMouseLeave={(e) => e.currentTarget.style.transform = "rotate(0deg)"}
+            >
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="20" 
+                height="20" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="white" 
+                strokeWidth="2.5" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              >
+                <path d="M21.5 2v6h-6M2.5 22v-6h6M2 12c0-3.6 2-6.8 5.3-8.2M22 12c0 3.6-2 6.8-5.3 8.2"/>
+              </svg>
+            </button>
+            {/* 👆 END NEW BUTTON */}
+
             <div className="profile-header">
               <div className="avatar-circle">{initials}</div>
               <div>
@@ -88,9 +125,7 @@ const ProfilePage = () => {
                     : "Profile synced with smart contract"}
                 </p>
               </div>
-              <button type="button" className="secondary-btn" onClick={fetchUserData}>
-                🔄 Refresh
-              </button>
+              {/* Removed the old button from here */}
             </div>
 
             <dl className="profile-meta">

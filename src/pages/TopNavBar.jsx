@@ -6,7 +6,7 @@ import { FaUserFriends } from "react-icons/fa";
 import { IoHomeSharp } from "react-icons/io5";
 import "./pageTheme.css";
 
-const TopNavBar = ({ title = "CryptoComm" }) => {
+const TopNavBar = ({ title = "Block-Talk" }) => {
   const navigate = useNavigate();
 
   return (
@@ -14,7 +14,7 @@ const TopNavBar = ({ title = "CryptoComm" }) => {
       <div className="nav-inner">
         {/* Brand Section */}
         <div className="brand-wrap" onClick={() => navigate("/dashboard")}>
-          <div className="avatar-circle small">CC</div>
+          <div className="avatar-circle small">BT</div>
           <h1 className="brand-name">{title}</h1>
         </div>
 

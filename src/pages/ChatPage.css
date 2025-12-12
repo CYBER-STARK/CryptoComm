@@ -1,5 +1,4 @@
-
-/* ====== ChatPage.css — Light Theme with Orange Accent ======
+/* ====== ChatPage.css – Light Theme with Orange Accent ======
    - Replaces green gradient with orange.
    - Restores safe scrolling and prevents overlap with input.
    - Comments added for every NEW/UPDATED rule/class to ease debugging.
@@ -21,7 +20,13 @@
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
-  background: var(--bg);
+  background:
+  linear-gradient(
+    to bottom, 
+    #1f2b3c 0%, 
+    #050505 80%, 
+    #712b08 100%
+  );
   color: var(--text);
 
 }
@@ -38,27 +43,34 @@ body {
 /* Sidebar (unchanged structure) */
 .chat-sidebar {
   width: 300px;
-  background: linear-gradient(180deg, var(--panel), #eef2f4);
-  border-radius: 12px;
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.08); /* 8% white */
+  backdrop-filter: blur(20px); /* GLASS EFFECT */
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.15);
   padding: 18px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
+
 .sidebar-header {
-  display:flex;
-  gap:10px;
-  align-items:center;
-  justify-content:space-between;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 12px;
-  background: #f4f1ed;
+  background: rgba(255, 255, 255, 0.08); /* transparency */
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.15);
 }
+
 .sidebar-header h2 {
   margin: 0;
   font-size: 1.15rem;
-  color: var(--text);
+  color: white;
 }
 .sidebar-header button {
   background: transparent;
@@ -137,35 +149,49 @@ body {
   font-family: monospace;
 }
 
-/* Main chat area */
+/* ========================================
+   CHAT AREA - Building from scratch
+   ======================================== */
+
+/* Main chat container */
 .chat-main {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  position: relative;
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid var(--border);
-  background: linear-gradient(180deg,#ffffff,#fbfdff);
-  box-shadow: 0 10px 30px rgba(15,23,42,0.04);
+  gap:10px;
 }
 
-/* Header */
+/* Chat header - positioned at the very top */
 .chat-header {
-  background: #f4f1ed;
-  padding: 18px 22px;
-  border-bottom: 1px solid var(--border);
+position: relative; /* Keeps z-index working */
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  
+  /* IMPORTANT: Prevents the header from getting squished */
+  flex-shrink: 0; 
+  z-index: 10;
 }
-.chat-header h3 {
+
+.chat-friend-info h3 {
   margin: 0;
-  color: var(--text);
+  color: white;
+  font-size: 1.2rem;
 }
+
 .chat-address {
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.6);
   font-size: 0.85rem;
   font-family: monospace;
+  margin-top: 4px;
 }
 
 .exit-btn {
@@ -173,148 +199,169 @@ body {
   border: 1px solid var(--accent-1);
   border-radius: 8px;
   color: var(--accent-1);
-  padding: 8px 12px;
+  padding: 8px 16px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-/* Messages area */
-/* NOTE: NEW - ensure the messages area scrolls independently and has safe bottom space
-   to avoid the sticky input overlapping message content. */
+.exit-btn:hover {
+  background: var(--accent-1);
+  color: white;
+}
+
+/* Messages area - with top padding to account for fixed header */
 .chat-messages {
   flex-grow: 1;
-  padding: 22px;
-  overflow-y: auto;           /* NEW: restore scroll behaviour */
+  /* CHANGED: Reduced bottom padding to 10px */
+  padding: 20px 20px 10px 20px; 
+  
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  /* NEW: extra bottom padding equals or exceeds input height so messages won't be hidden */
-  padding-bottom: 140px;      /* NEW: adjust if your .chat-input height changes */
-  background: repeating-linear-gradient(180deg, transparent, transparent 120px, rgba(0,0,0,0.01) 121px);
-  /*
-  background-image: 
-    url("/assets/Chat-background.png"),
-    repeating-linear-gradient(180deg, transparent, transparent 120px, rgba(0,0,0,0.01) 121px);
-  background-repeat: no-repeat, repeat;
-  background-position: center top, 0 0;
-  background-size: cover, auto;
-  */
+  background-color: #152530;
+  background-image: url('../assets/Chat\ background\ dark.png');
+  background-repeat: repeat;
+  background-size: 600px; 
+  background-blend-mode: overlay; 
+  
+  /* NEW: Adds the rounded bottom corners */
+  border-radius: 0 0 24px 24px;
+}
+.chat-messages::-webkit-scrollbar {
+  width: 8px;
 }
 
-/* NEW: custom class for nicer scrollbar (non-overlapping) */
-.chat-messages::-webkit-scrollbar {
-  width: 10px;
-}
 .chat-messages::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .chat-messages::-webkit-scrollbar-thumb {
-  background: rgba(15,23,42,0.06);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
 }
 
-/* message bubble rules (unchanged colours but using new accent variables) */
+
 .message {
-  max-width: 64%;
-  margin-bottom: 0;
-  padding: 12px 16px;
+  width: fit-content;
+  max-width: 65%;
+  min-width: 70px;
+  padding: 6px 10px 4px 6px; 
+  
   border-radius: 12px;
   line-height: 1.4;
   font-size: 0.95rem;
-  position: relative;
   animation: fadeIn 0.18s ease;
-  box-shadow: 0 6px 18px rgba(15,23,42,0.03);
+  
+  /* Layout: Column stack */
+  display: flex;
+  flex-direction: column;
+  
+  /* IMPORTANT: Ensures content aligns to the left edge */
+  
+  
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .message.sent {
   align-self: flex-end;
-  background: linear-gradient(90deg, #ffe8d1, #ffd7b5);
- /* shows orange now */
-  color: #042024;
-  border-bottom-right-radius: 6px;
+  background: #8f530d;
+  color: white;
+  border-bottom-right-radius: 4px;
 }
+
 .message.received {
   align-self: flex-start;
-  background: #ffffff;
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-bottom-left-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: white;
+  border-bottom-left-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-/* ✅ Encryption badge */
-.encryption-badge {
-  display: inline-block;
-  margin-left: 6px;
-  font-size: 12px;
-  opacity: 0.7;
-  vertical-align: middle;
+/* Add this class to your <p> tag inside the message */
+.message-text {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  align-items: flex-start; 
+  /* Ensures text doesn't drift if the bubble gets wide */
+  width: 100%; 
 }
 
-/* ✅ Message footer with status */
+/* If you didn't add the class name in JSX, use this: */
+.message p {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  white-space: pre-wrap;
+  flex-grow: 1;
+}
+
 .message-footer {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-top: 4px;
-  font-size: 11px;
+  justify-content: flex-end;
+  
+  /* IMPORTANT: Overrides parent alignment to stick to the right */
+  align-self: flex-end; 
+  
+  margin-top: 2px;
+  height: auto;
   opacity: 0.7;
-}
-
-.message-status {
-  font-size: 12px;
-  color: var(--accent-1);
-  margin-left: 4px;
+  gap: 4px; 
 }
 
 .message-time {
-  font-size: 0.75rem;
-  color: var(--muted);
-  margin-top: 6px;
-  display: block;
-  text-align: right;
+  font-size: 0.65rem;
+  line-height: 1;
+}
+.message-status {
+  font-size: 12px;
+  margin-left: 4px;
 }
 
-/* animation */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Chat input area - sticky to bottom */
-/* NOTE: NEW - making chat-input sticky to ensure it always sits above chat-messages
-   and remains visible on scroll. */
+/* Chat input area - positioned at bottom */
 .chat-input {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 18px;
-  border-top: 1px solid var(--border);
-  background: linear-gradient(180deg,#ffffff,#fbfdff);
-  position: sticky;     /* NEW */
-  bottom: 0;            /* NEW */
-  z-index: 6;           /* NEW: ensure input floats above messages */
+  
+  /* CHANGED: Set top padding to 0 (relying on flex-gap for spacing) */
+  padding: 0 18px 14px 18px;
+  
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-top: none;
 }
 
-/* File label (attachment) — larger and tappable (kept from previous) */
+/* File upload label */
 .file-label {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 48px;            /* increased size */
-  height: 48px;           /* increased size */
-  border-radius: 12px;
-  border: 1px solid var(--border);
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   cursor: pointer;
-  font-size: 1.35rem;
-  box-shadow: 0 6px 16px rgba(15,23,42,0.04);
-  background: #fff;
-  transition: transform 0.12s, box-shadow 0.12s;
-}
-.file-label:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 28px rgba(15,23,42,0.06);
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
 }
 
-/* hidden native file input is ok */
+.file-label:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
 #file-upload {
   display: none;
 }
@@ -322,55 +369,122 @@ body {
 /* Message input field */
 .chat-input input[type="text"] {
   flex-grow: 1;
-  background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px 14px;
-  color: var(--text);
-  font-size: 0.98rem;
-  outline: none;
-  box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
-}
-.chat-input input[type="text"]::placeholder {
-  color: var(--muted);
-}
-
-/* NEW: separate send button class so it's easier to debug/style */
-.send-btn {
-  background: linear-gradient(90deg, var(--accent-1), var(--accent-2)); /* orange gradient */
-  border: none;
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
   padding: 12px 16px;
-  color: #022; 
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 1.1rem;
-  box-shadow: 0 8px 22px rgba(255,138,0,0.08); /* NEW: orange shadow */
-  transition: transform 0.12s, box-shadow 0.12s;
-}
-.send-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 40px rgba(255,138,0,0.12);
+  color: white;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s ease;
 }
 
-/* File message link appearance */
-.file-message {
-  color: var(--accent-1);
-  text-decoration: none;
-  font-weight: 700;
+.chat-input input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
-.file-message:hover {
-  text-decoration: underline;
+
+.chat-input input[type="text"]:focus {
+background: rgba(255, 255, 255, 0.15);
+  border-color: var(--accent-1);
+  
+  /* NEW: Adds a soft orange glow ring */
+  box-shadow: 0 0 0 4px rgba(255, 138, 0, 0.15);
+}
+
+/* Send button */
+.send-btn {
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  border: none;
+  border-radius: 10px;
+  
+  /* CHANGED: Adjusted padding for the icon */
+  padding: 12px 14px; 
+  
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(255, 138, 0, 0.3);
+
+  /* NEW: Centers the SVG icon perfectly */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.send-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 138, 0, 0.4);
+}
+
+.send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* File bubble */
+.file-bubble {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+.file-bubble h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--accent-1);
+}
+
+.file-bubble p {
+  margin: 4px 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+}
+
+.file-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.file-actions .primary-btn,
+.file-actions .secondary-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.file-actions .primary-btn {
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  border: none;
+  color: white;
+}
+
+.file-actions .secondary-btn {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.file-actions .primary-btn:hover,
+.file-actions .secondary-btn:hover {
+  transform: scale(1.05);
 }
 
 /* No chat placeholder */
 .no-chat {
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex:1;
-  color: var(--muted);
-  font-size:1.05rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.05rem;
 }
 
 /* Responsive tweaks */
@@ -387,7 +501,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(8px);
   color: #fff;
-  max-width: 65%; /* reduced from 80% for smaller width */
+  max-width: 65%;
   font-size: 0.85rem;
   line-height: 1.3;
 }
@@ -443,6 +557,7 @@ body {
   transform: scale(1.05);
   opacity: 0.9;
 }
+
 /* Circular gradient avatar */
 .profile-avatar {
   width: 40px;
@@ -465,20 +580,10 @@ body {
   box-shadow: 0 0 10px rgba(255, 136, 0, 0.4);
 }
 
-/* Keep "Chats" centered visually even with avatar */
-.sidebar-header h2 {
-  flex-grow: 1;
-  text-align: center;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #000;
-  margin: 0;
-}
-
 /* Friends button */
 .friends-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
   color: #fff;
   padding: 0.4rem 0.8rem;
   border-radius: 0.6rem;
@@ -488,5 +593,6 @@ body {
 }
 
 .friends-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background:orange;
+  color: white;
 }
